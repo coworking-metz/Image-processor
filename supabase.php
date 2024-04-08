@@ -12,5 +12,5 @@ $uri = str_replace('/supabase/','/', $uri);
 $url = 'https://lvsbvjweppdlhmjuqqvt.supabase.co/storage/v1/object/public'.$uri;
 
 if(!outputImage($url)) {
-    erreur(404);
+    erreur(500);
 }

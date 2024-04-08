@@ -24,14 +24,19 @@ function outputImage($imageUrl) {
             $contentType = 'image/webp';
             break;
         default:
-            die('Type de fichier non supporté.');
+           return;
     }
     
+ 
+
+    // Lire et envoyer le contenu de l'image
+    $c = file_get_contents($imageUrl);
+
+    if(!$c) return;
+
     // Configurer les en-têtes pour le cache
     header('Content-Type: ' . $contentType);
     header('Cache-Control: public, max-age=31536000, s-max-age=31536000, immutable'); // Cache pour un an
     header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 31536000) . ' GMT');
-
-    // Lire et envoyer le contenu de l'image
-    return readfile($imageUrl);
+    echo $c;
 }
