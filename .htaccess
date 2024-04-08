@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteBase /
+RewriteRule ^supabase/(.+)$ /supabase.php [L,QSA]
