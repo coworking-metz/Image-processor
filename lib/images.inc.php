@@ -33,6 +33,7 @@ function outputImage($imageUrl) {
     $c = file_get_contents($imageUrl);
 
     if(!$c) return;
+    cloudflareHit();
 
     // Configurer les en-têtes pour le cache
     header('Content-Type: ' . $contentType);

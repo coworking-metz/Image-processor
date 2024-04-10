@@ -4,3 +4,4 @@ if(isset($_GET['debug'])) {
     ini_set('display_errors', 'On');
 }
 include 'images.inc.php';
+include 'utils.inc.php';
