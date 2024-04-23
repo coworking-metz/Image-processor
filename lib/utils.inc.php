@@ -23,6 +23,19 @@ function cloudflareHit($urls=false) {
     file_get_contents('https://cloudflare.coworking-metz.fr/hit', false, $context);
 }
 
+
+function cacheHeaders()
+	{
+		$max_age = 31536000 ;
+		$smax_age = 31536000 ;
+
+		header_remove('Pragma');
+		header_remove('Expires');
+		header_remove('Cache-Control');
+		header('Cache-Control: public, max-age=' . $max_age . ', s-maxage=' . $smax_age . ', immutable');
+	}
+
+
 function noCacheHeaders() {
     header("Cache-Control: no-cache, must-revalidate, max-age=0");
     header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
