@@ -10,6 +10,7 @@
 function outputImage($imageUrl, $options = [])
 {
     $width = $options['width'] ?? false;
+    $cache = $options['cache'] ?? true;
     $imageType = strtolower(pathinfo($imageUrl, PATHINFO_EXTENSION));
     $localPath = __DIR__ . '/../tmp/' . md5($imageUrl . json_encode($options)) . '.' . $imageType;
 
@@ -33,7 +34,7 @@ function outputImage($imageUrl, $options = [])
     }
 
     // Vérifier si l'image est déjà en cache
-    if (file_exists($localPath)) {
+    if ($cache && file_exists($localPath)) {
         $c = file_get_contents($localPath);
     } else {
         $c = file_get_contents($imageUrl);
@@ -46,6 +47,10 @@ function outputImage($imageUrl, $options = [])
             $height = ($originalHeight / $originalWidth) * $width;
 
             $resizedImage = imagecreatetruecolor($width, $height);
+            imagealphablending($resizedImage, false);
+            imagesavealpha($resizedImage, true);
+            $transparent = imagecolorallocatealpha($resizedImage, 0, 0, 0, 127);
+            imagefill($resizedImage, 0, 0, $transparent);
             imagecopyresampled($resizedImage, $imageResource, 0, 0, 0, 0, $width, $height, $originalWidth, $originalHeight);
 
             ob_start();
@@ -71,7 +76,9 @@ function outputImage($imageUrl, $options = [])
         file_put_contents($localPath, $c);
     }
 
-
+    cors();
+    cacheHeaders();
+    cloudflareHit();
     // Appliquer les en-têtes de cache et envoyer l'image
     header('Content-Type: ' . $contentType);
     echo $c;
